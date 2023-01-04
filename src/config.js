@@ -19,7 +19,7 @@ const getLocalIp = () => {
 
 module.exports = {
   listenIp: '0.0.0.0',
-  listenPort: 3016,
+  listenPort: 3000,
   sslCrt: '../ssl/cert.pem',
   sslKey: '../ssl/key.pem',
 
@@ -27,8 +27,8 @@ module.exports = {
     // Worker settings
     numWorkers: Object.keys(os.cpus()).length,
     worker: {
-      rtcMinPort: 10000,
-      rtcMaxPort: 10100,
+      rtcMinPort: 40000,
+      rtcMaxPort: 49999,
       logLevel: 'warn',
       logTags: [
         'info',
@@ -68,7 +68,7 @@ module.exports = {
       listenIps: [
         {
           ip: '0.0.0.0',
-          announcedIp: getLocalIp() // replace by public IP address
+          announcedIp: '160.251.50.231' // replace by public IP address
         }
       ],
       maxIncomingBitrate: 1500000,
