@@ -2,12 +2,12 @@
   font-family: Verdana;
 }
 
-body {
+/* body {
   background-image: url('bg.jpg');
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-}
+} */
 
 .containers {
   display: grid;
@@ -18,9 +18,9 @@ body {
   cursor: pointer;
 }
 
-.container {
+/* .container {
   display: flex;
-}
+} */
 
 .vid {
   flex: 0 1 auto;
