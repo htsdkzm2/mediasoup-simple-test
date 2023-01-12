@@ -21,6 +21,7 @@ class RoomClient {
         this.remoteVideoEl = remoteVideoEl
         this.remoteAudioEl = remoteAudioEl
         this.mediasoupClient = mediasoupClient
+        this.successCallback = successCallback
 
         this.socket = socket
         this.producerTransport = null
@@ -55,7 +56,7 @@ class RoomClient {
                 await this.join(name, room_id)
                 this.initSockets()
                 this._isOpen = true
-                successCallback()
+                //successCallback()
             }.bind(this)
         )
     }
@@ -86,6 +87,7 @@ class RoomClient {
                     this.device = device
                     await this.initTransports(device)
                     this.socket.emit('getProducers')
+                    this.successCallback()
                 }.bind(this)
             )
             .catch((err) => {

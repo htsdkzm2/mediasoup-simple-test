@@ -65,12 +65,17 @@
     opacity: 0.5;
 }
 
-#submitButton {
+#enterRoomButton {
     align-content: center;
     text-align: center;
     color: #ddd;
     background-color: #645fcc;
     border: none;
     border-radius: 4px;
-    width: 70%;
+    width: 80%;
+}
+
+#swicthMediaButton {
+    width: 50%;
+    height: 10%;
 }

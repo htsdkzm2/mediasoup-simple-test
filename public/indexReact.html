@@ -9,6 +9,11 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="socket.io/socket.io.js"></script>
+    <script src="modules/mediasoupclient.min.js"></script>
+    <script src="modules/EventEmitter.min.js"></script>
+    <script src="RoomClient.js"></script>
+    <script src="index.js "></script>
     <script type="text/babel" src="testScript.js"></script>
     <link rel="stylesheet" href="index.css" />
     <link rel="stylesheet" href="style.css" />
@@ -16,11 +21,6 @@
 </head>
 
 <body>
-    <script src="socket.io/socket.io.js"></script>
-    <script src="modules/mediasoupclient.min.js"></script>
-    <script src="modules/EventEmitter.min.js"></script>
-    <script src="RoomClient.js"></script>
-    <!-- <script src="index.js "></script> -->
     <div id="root">
         <div id="login" class="animate join">
             <h1>Join a Room</h1>
@@ -29,17 +29,14 @@
                     <input type="text" name="name" value="" id="nameInput" placeholder="Username" required>
                 </p>
                 <p>
-                    <input type="text" name="room" value="" id="videoInput" placeholder="Room" required>
+                    <input type="text" name="room" value="" id="roomInput" placeholder="Room" required>
                 </p>
                 <p class="submit">
-                    <input type="submit" name="commit" value="Join!" onclick="goGoDeviceList()">
+                    <input id="submitButton" type="submit" name="commit" value="Join!" >
                 </p>
             </form>
         </div>
     </div>
 </body>
-<footer>
-    <script src="index.js "></script>
-</footer>
 
 </html>
