@@ -2,8 +2,6 @@
 const socket = io()
 let producer = null
 let rc = null
-let remoteVideos = document.getElementById("remoteVideos");
-let remoteAudios = document.getElementById("remoteAudios");
 
 socket.request = function request(type, data = {}) {
     return new Promise((resolve, reject) => {
@@ -21,9 +19,10 @@ function joinRoom(name, room_id) {
     if (rc && rc.isOpen()) {
         console.log('Already connected to a room')
     } else {
-        console.log("join room localmedia");
         let localMedia = document.getElementById("localMedia");
-        console.log(localMedia);
+        let remoteVideos = document.getElementById("remoteVideos");
+        let remoteAudios = document.getElementById("remoteAudios");
+
         rc = new RoomClient(localMedia, remoteVideos, remoteAudios, window.mediasoupClient, socket, room_id, name, roomOpen)
     }
 }
