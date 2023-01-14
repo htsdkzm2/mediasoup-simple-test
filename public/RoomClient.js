@@ -235,6 +235,9 @@ class RoomClient {
             'consumerClosed',
             function({ consumer_id }) {
                 console.log('Closing consumer:', consumer_id)
+                if (document.getElementById("remoteVideos").childElementCount == 0) {
+                    this.remoteVideoEl.style.display = "none"
+                }
                 this.removeConsumer(consumer_id)
             }.bind(this)
         )
@@ -312,8 +315,8 @@ class RoomClient {
             default:
                 return
         }
-        // if (!this.device.canProduce('video') && !audio) {
-        if (!video && !audio) {
+        if (!this.device.canProduce('video') && !audio) {
+        //if (!video && !audio) {
             console.error('Cannot produce video')
             return
         }
@@ -369,8 +372,9 @@ class RoomClient {
                 elem.playsinline = false
                 elem.autoplay = true
                 elem.className = 'vid'
+                //elem.controls = true
                 this.localMediaEl.appendChild(elem)
-                this.handleFS(elem.id)
+                //this.handleFS(elem.id)
             }
 
             producer.on('trackended', () => {
@@ -434,8 +438,10 @@ class RoomClient {
                     elem.playsinline = false
                     elem.autoplay = true
                     elem.className = 'vid'
+                    //elem.controls = true
+                    this.remoteVideoEl.style.display = "block"
                     this.remoteVideoEl.appendChild(elem)
-                    this.handleFS(elem.id)
+                    //this.handleFS(elem.id)
                 } else {
                     elem = document.createElement('audio')
                     elem.srcObject = stream
