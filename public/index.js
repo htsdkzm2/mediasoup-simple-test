@@ -1,7 +1,11 @@
-// if (location.href.substr(0, 5) !== 'https') location.href = 'https' + location.href.substr(4, location.href.length - 4)
 const socket = io()
 let producer = null
 let rc = null
+let localMedia = document.createElement("div");
+let remoteVideos = document.createElement("div");
+let remoteAudios = document.createElement("div");
+const PARTICIPANT_MAIN_CLASS = 'participant main';
+const PARTICIPANT_CLASS = 'participant';
 
 socket.request = function request(type, data = {}) {
     return new Promise((resolve, reject) => {
