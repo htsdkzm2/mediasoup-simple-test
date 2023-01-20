@@ -53,14 +53,26 @@ function RoomContainer() {
         appendElembeforeJoin()
     });
     return (
-        <div className="container">
-            <div id="participants"></div>
-            <button id="startScreenButton" className="" onClick={ () => startScreen() }>
-                    <i className="fas fa-desktop"></i> Open screen
-                </button>
-            <button id="stopScreenButton" className="hidden" onClick={ () => closeScreen() }>
-                    <i className="fas fa-desktop"></i> Close screen
-                </button>
+        <div>
+            <div className="container">
+                <div id="participants"></div>
+            </div>
+            <footer>
+                <div className="media-control-bar">
+                    <button className="media-control-button" id="videoOnOffButton" onClick={ () => didTapVideoButton() }>
+                        <i className="material-icons">videocam_off</i>
+                    </button>
+                    <button className="media-control-button" id="micOnOffButton">
+                        <i className="material-icons">mic_off</i>
+                    </button>
+                    <button className="media-control-button" id="screenShareOnOffButton" onClick={ () => screenSharing() }>
+                        <i className="material-icons">screen_share</i>
+                    </button>
+                    <button className="media-control-button" id="exitRoomButton" onClick={ ()=> didTapExitButton()}>
+                        <i className="material-icons">call_end</i>
+                    </button>
+                </div>
+            </footer>
         </div>
     )
 }

@@ -4,6 +4,8 @@ let rc = null
 let localMedia = document.createElement("div");
 let remoteVideos = document.createElement("div");
 let remoteAudios = document.createElement("div");
+let isScreenSharing = false
+let isShowingVideo = false
 const PARTICIPANT_MAIN_CLASS = 'participant main';
 const PARTICIPANT_CLASS = 'participant';
 
@@ -22,9 +24,6 @@ socket.request = function request(type, data = {}) {
 function appendElembeforeJoin() {
     new Promise((resolve) => {
         let participants = document.getElementById("participants");
-        // localMedia = document.createElement("div");
-        // remoteVideos = document.createElement("div");
-        // remoteAudios = document.createElement("div");
         localMedia.id = "localMedia";
         remoteVideos.id = "remoteVideos";
         remoteAudios.id = "remoteAudios";
@@ -47,6 +46,7 @@ function joinRoom(name, room_id) {
         rc = new RoomClient(localMedia, remoteVideos, remoteAudios, window.mediasoupClient, socket, room_id, name, roomOpen)
         settingSwicthVideos(localMedia);
         settingSwicthVideos(remoteVideos);
+        addListeners();
     }
 }
 
@@ -55,12 +55,40 @@ function roomOpen() {
     rc.produce(mediaType.video);
 }
 
-function startScreen() {
-    rc.produce(RoomClient.mediaType.screen);
+function screenSharing() {
+    if (!isScreenSharing) {
+        rc.produce(RoomClient.mediaType.screen);
+    } else {
+        rc.closeProducer(RoomClient.mediaType.screen);
+    }
 }
 
-function closeScreen() {
-    rc.closeProducer(RoomClient.mediaType.screen);
+function startScreenHandler() {
+    isScreenSharing = true;
+    const screenButton = document.getElementById("screenShareOnOffButton");
+    screenButton.firstElementChild.textContent = "stop_screen_share";
+}
+
+function closeScreenHandler() {
+    isScreenSharing = false;
+    const screenButton = document.getElementById("screenShareOnOffButton");
+    screenButton.firstElementChild.textContent = "screen_share";
+}
+
+function didTapVideoButton() {
+    if (!isShowingVideo) {
+        rc.produce(RoomClient.mediaType.video);
+    } else {
+        rc.closeProducer(RoomClient.mediaType.video);
+    }
+}
+
+function didTapExitButton() {
+    rc.exit();
+}
+
+function didTapExitButton() {
+    rc.exit();
 }
 
 function switchContainerClass(container) {
@@ -94,36 +122,30 @@ function reveal(elem) {
 
 function addListeners() {
     rc.on(RoomClient.EVENTS.startScreen, () => {
-        hide(startScreenButton)
-        reveal(stopScreenButton)
+        startScreenHandler();
     })
 
     rc.on(RoomClient.EVENTS.stopScreen, () => {
-        hide(stopScreenButton)
-        reveal(startScreenButton)
+        closeScreenHandler();
     })
 
     rc.on(RoomClient.EVENTS.stopAudio, () => {
-        hide(stopAudioButton)
-        reveal(startAudioButton)
     })
     rc.on(RoomClient.EVENTS.startAudio, () => {
         console.log("event startAudio");
     })
 
     rc.on(RoomClient.EVENTS.startVideo, () => {
-        console.log("event startVideo");
-
+        isShowingVideo = true;
+        const screenButton = document.getElementById("videoOnOffButton");
+        screenButton.firstElementChild.textContent = "videocam_off";
     })
     rc.on(RoomClient.EVENTS.stopVideo, () => {
-        hide(stopVideoButton)
-        reveal(startVideoButton)
+        isShowingVideo = false;
+        const screenButton = document.getElementById("videoOnOffButton");
+        screenButton.firstElementChild.textContent = "videocam_on";
     })
     rc.on(RoomClient.EVENTS.exitRoom, () => {
-        hide(control)
-        hide(devicesList)
-        //hide(videoMedia)
-        hide(devicesButton)
-        reveal(login)
+        location.reload();
     })
 }
