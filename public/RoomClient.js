@@ -289,25 +289,6 @@ class RoomClient {
                 }
                 video = true
                 break
-                // case mediaType.video:
-                //     mediaConstraints = {
-                //         audio: false,
-                //         video: {
-                //             width: {
-                //                 min: 640,
-                //                 ideal: 1920
-                //             },
-                //             height: {
-                //                 min: 400,
-                //                 ideal: 1080
-                //             },
-                //             deviceId: deviceId
-                //                 /*aspectRatio: {
-                //                                 ideal: 1.7777777778
-                //                             }*/
-                //         }
-                //     }
-                //     break
             case mediaType.screen:
                 mediaConstraints = false
                 screen = true
