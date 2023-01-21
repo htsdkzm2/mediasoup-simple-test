@@ -4,8 +4,9 @@ let rc = null
 let localMedia = document.createElement("div");
 let remoteVideos = document.createElement("div");
 let remoteAudios = document.createElement("div");
-let isScreenSharing = false
-let isShowingVideo = false
+let isScreenSharing = false;
+let isShowingVideo = false;
+let isShowingAudio = false;
 const PARTICIPANT_MAIN_CLASS = 'participant main';
 const PARTICIPANT_CLASS = 'participant';
 
@@ -83,6 +84,15 @@ function didTapVideoButton() {
     }
 }
 
+function didTapAudioButton() {
+
+    if (!isShowingAudio) {
+        rc.produce(RoomClient.mediaType.audio);
+    } else {
+        rc.closeProducer(RoomClient.mediaType.audio);
+    }
+}
+
 function didTapExitButton() {
     rc.exit();
 }
@@ -106,7 +116,6 @@ function switchContainerClass(container) {
 function settingSwicthVideos(elem) {
     elem.onclick = function(){
         switchContainerClass(elem);
-        console.log("click!", elem)
       };
 }
 
@@ -124,17 +133,19 @@ function addListeners() {
     rc.on(RoomClient.EVENTS.startScreen, () => {
         startScreenHandler();
     })
-
     rc.on(RoomClient.EVENTS.stopScreen, () => {
         closeScreenHandler();
     })
-
-    rc.on(RoomClient.EVENTS.stopAudio, () => {
-    })
     rc.on(RoomClient.EVENTS.startAudio, () => {
-        console.log("event startAudio");
+        isShowingAudio = true;
+        const screenButton = document.getElementById("micOnOffButton");
+        screenButton.firstElementChild.textContent = "mic_off";
     })
-
+    rc.on(RoomClient.EVENTS.stopAudio, () => {
+        isShowingAudio = false;
+        const screenButton = document.getElementById("micOnOffButton");
+        screenButton.firstElementChild.textContent = "mic";
+    })
     rc.on(RoomClient.EVENTS.startVideo, () => {
         isShowingVideo = true;
         const screenButton = document.getElementById("videoOnOffButton");
@@ -143,7 +154,7 @@ function addListeners() {
     rc.on(RoomClient.EVENTS.stopVideo, () => {
         isShowingVideo = false;
         const screenButton = document.getElementById("videoOnOffButton");
-        screenButton.firstElementChild.textContent = "videocam_on";
+        screenButton.firstElementChild.textContent = "videocam";
     })
     rc.on(RoomClient.EVENTS.exitRoom, () => {
         location.reload();

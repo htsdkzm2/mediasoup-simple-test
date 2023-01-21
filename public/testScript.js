@@ -62,7 +62,7 @@ function RoomContainer() {
                     <button className="media-control-button" id="videoOnOffButton" onClick={ () => didTapVideoButton() }>
                         <i className="material-icons">videocam_off</i>
                     </button>
-                    <button className="media-control-button" id="micOnOffButton">
+                    <button className="media-control-button" id="micOnOffButton" onClick={ () => didTapAudioButton() }>
                         <i className="material-icons">mic_off</i>
                     </button>
                     <button className="media-control-button" id="screenShareOnOffButton" onClick={ () => screenSharing() }>
