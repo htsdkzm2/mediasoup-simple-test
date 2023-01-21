@@ -49,8 +49,11 @@ function renderReact() {
 }
 
 function RoomContainer() {
+    let audioId = document.getElementById("audioSelect").value;
+    let videoId = document.getElementById("videoSelect").value;
+
     React.useEffect(() => {
-        appendElembeforeJoin()
+        appendElembeforeJoin(audioId, videoId)
     });
     return (
         <div>

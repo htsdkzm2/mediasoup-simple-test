@@ -14,6 +14,8 @@ const _EVENTS = {
     stopScreen: 'stopScreen'
 }
 
+let roomList = new Map()
+
 class RoomClient {
     constructor(localMediaEl, remoteVideoEl, remoteAudioEl, mediasoupClient, socket, room_id, name, successCallback) {
         this.name = name
@@ -269,7 +271,7 @@ class RoomClient {
 
     //////// MAIN FUNCTIONS /////////////
 
-    async produce(type) {
+    async produce(type, deviceId) {
         let mediaConstraints = {}
         let audio = false
         let video = false
@@ -277,7 +279,7 @@ class RoomClient {
         switch (type) {
             case mediaType.audio:
                 mediaConstraints = {
-                    audio: true,
+                    audio: { deviceId: deviceId },
                     video: false
                 }
                 audio = true
@@ -285,7 +287,7 @@ class RoomClient {
             case mediaType.video:
                 mediaConstraints = {
                     audio: false,
-                    video: true
+                    video: { deviceId: deviceId }
                 }
                 video = true
                 break

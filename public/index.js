@@ -7,6 +7,9 @@ let remoteAudios = document.createElement("div");
 let isScreenSharing = false;
 let isShowingVideo = false;
 let isShowingAudio = false;
+let selectedDeviceVideoID;
+let selectedDeviceAudioID;
+
 const PARTICIPANT_MAIN_CLASS = 'participant main';
 const PARTICIPANT_CLASS = 'participant';
 
@@ -22,7 +25,7 @@ socket.request = function request(type, data = {}) {
     })
 }
 
-function appendElembeforeJoin() {
+function appendElembeforeJoin(audioId, videoId) {
     new Promise((resolve) => {
         let participants = document.getElementById("participants");
         localMedia.id = "localMedia";
@@ -34,6 +37,8 @@ function appendElembeforeJoin() {
         participants.appendChild(localMedia);
         participants.appendChild(remoteVideos);
         participants.appendChild(remoteAudios);
+        selectedDeviceAudioID = audioId
+        selectedDeviceVideoID = videoId
         resolve();
       }).then(() => {
         joinRoom(userName, roomName);
@@ -52,8 +57,8 @@ function joinRoom(name, room_id) {
 }
 
 function roomOpen() {
-    rc.produce(mediaType.audio);
-    rc.produce(mediaType.video);
+    rc.produce(mediaType.audio, selectedDeviceAudioID);
+    rc.produce(mediaType.video, selectedDeviceVideoID);
 }
 
 function screenSharing() {
