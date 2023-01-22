@@ -124,16 +124,6 @@ function settingSwicthVideos(elem) {
       };
 }
 
-//////////////// 未使用 //////////////////
-
-function hide(elem) {
-    elem.className = 'hidden'
-}
-
-function reveal(elem) {
-    elem.style.display = "block";
-}
-
 function addListeners() {
     rc.on(RoomClient.EVENTS.startScreen, () => {
         startScreenHandler();

@@ -115,7 +115,6 @@ io.on('connection', (socket) => {
 
     // send all the current producer to newly joined member
     let producerList = roomList.get(socket.room_id).getProducerListForPeer()
-
     socket.emit('newProducers', producerList)
   })
 

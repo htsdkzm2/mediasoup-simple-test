@@ -355,7 +355,9 @@ class RoomClient {
                 elem.playsinline = false
                 elem.autoplay = true
                 elem.className = 'vid'
-                //elem.controls = true
+                if (screen) {
+                    elem.controls = true
+                }
                 this.localMediaEl.appendChild(elem)
                 //this.handleFS(elem.id)
             }
@@ -618,16 +620,6 @@ class RoomClient {
     //   document.body.removeChild(tmpInput)
     //   console.log('URL copied to clipboard 👍')
     // }
-
-    showDevices() {
-        if (!this.isDevicesVisible) {
-            reveal(devicesList)
-            this.isDevicesVisible = true
-        } else {
-            hide(devicesList)
-            this.isDevicesVisible = false
-        }
-    }
 
     handleFS(id) {
         let videoPlayer = document.getElementById(id)
