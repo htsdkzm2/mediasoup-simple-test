@@ -63,10 +63,10 @@ function RoomContainer() {
             <footer>
                 <div className="media-control-bar">
                     <button className="media-control-button" id="videoOnOffButton" onClick={ () => didTapVideoButton() }>
-                        <i className="material-icons">videocam_off</i>
+                        <i className="material-icons">videocam</i>
                     </button>
                     <button className="media-control-button" id="micOnOffButton" onClick={ () => didTapAudioButton() }>
-                        <i className="material-icons">mic_off</i>
+                        <i className="material-icons">mic</i>
                     </button>
                     <button className="media-control-button" id="screenShareOnOffButton" onClick={ () => screenSharing() }>
                         <i className="material-icons">screen_share</i>

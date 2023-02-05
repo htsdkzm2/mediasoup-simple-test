@@ -134,22 +134,22 @@ function addListeners() {
     rc.on(RoomClient.EVENTS.startAudio, () => {
         isShowingAudio = true;
         const screenButton = document.getElementById("micOnOffButton");
-        screenButton.firstElementChild.textContent = "mic_off";
+        screenButton.firstElementChild.textContent = "mic";
     })
     rc.on(RoomClient.EVENTS.stopAudio, () => {
         isShowingAudio = false;
         const screenButton = document.getElementById("micOnOffButton");
-        screenButton.firstElementChild.textContent = "mic";
+        screenButton.firstElementChild.textContent = "mic_off";
     })
     rc.on(RoomClient.EVENTS.startVideo, () => {
         isShowingVideo = true;
         const screenButton = document.getElementById("videoOnOffButton");
-        screenButton.firstElementChild.textContent = "videocam_off";
+        screenButton.firstElementChild.textContent = "videocam";
     })
     rc.on(RoomClient.EVENTS.stopVideo, () => {
         isShowingVideo = false;
         const screenButton = document.getElementById("videoOnOffButton");
-        screenButton.firstElementChild.textContent = "videocam";
+        screenButton.firstElementChild.textContent = "videocam_off";
     })
     rc.on(RoomClient.EVENTS.exitRoom, () => {
         location.reload();
