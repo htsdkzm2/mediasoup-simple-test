@@ -32,7 +32,7 @@ function appendElembeforeJoin(audioId, videoId) {
         remoteVideos.id = "remoteVideos";
         remoteAudios.id = "remoteAudios";
         localMedia.className = PARTICIPANT_MAIN_CLASS;
-        remoteVideos.className = PARTICIPANT_CLASS;
+        // remoteVideos.className = PARTICIPANT_CLASS;
         remoteVideos.style.display = "none"
         participants.appendChild(localMedia);
         participants.appendChild(remoteVideos);
@@ -50,8 +50,8 @@ function joinRoom(name, room_id) {
         console.log('Already connected to a room')
     } else {
         rc = new RoomClient(localMedia, remoteVideos, remoteAudios, window.mediasoupClient, socket, room_id, name, roomOpen)
-        settingSwicthVideos(localMedia);
-        settingSwicthVideos(remoteVideos);
+        //settingSwicthVideos(localMedia);
+        //settingSwicthVideos(remoteVideos);
         addListeners();
     }
 }
@@ -106,23 +106,23 @@ function didTapExitButton() {
     rc.exit();
 }
 
-function switchContainerClass(container) {
-    if (container.className === PARTICIPANT_CLASS) {
-        var elements = Array.prototype.slice.call(document.getElementsByClassName(PARTICIPANT_MAIN_CLASS));
-        elements.forEach(function(item) {
-            item.className = PARTICIPANT_CLASS;
-        });
-        container.className = PARTICIPANT_MAIN_CLASS;
-    } else {
-        container.className = PARTICIPANT_CLASS;
-    }
-}
+// function switchContainerClass(container) {
+//     if (container.className === PARTICIPANT_CLASS) {
+//         var elements = Array.prototype.slice.call(document.getElementsByClassName(PARTICIPANT_MAIN_CLASS));
+//         elements.forEach(function(item) {
+//             item.className = PARTICIPANT_CLASS;
+//         });
+//         container.className = PARTICIPANT_MAIN_CLASS;
+//     } else {
+//         container.className = PARTICIPANT_CLASS;
+//     }
+// }
 
-function settingSwicthVideos(elem) {
-    elem.onclick = function(){
-        switchContainerClass(elem);
-      };
-}
+// function settingSwicthVideos(elem) {
+//     elem.onclick = function(){
+//         switchContainerClass(elem);
+//       };
+// }
 
 function addListeners() {
     rc.on(RoomClient.EVENTS.startScreen, () => {

@@ -185,6 +185,8 @@ io.on('connection', (socket) => {
       producer_id: `${producerId}`,
       consumer_id: `${params.id}`
     })
+    params.peerList = roomList.get(socket.room_id).toJson()
+    console.log("peerList; ", roomList.get(socket.room_id).toJson())
 
     callback(params)
   })
