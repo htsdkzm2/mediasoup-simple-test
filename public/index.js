@@ -1,11 +1,7 @@
-
-if (location.href.substr(0, 5) !== 'https') location.href = 'https' + location.href.substr(4, location.href.length - 4)
-
+// if (location.href.substr(0, 5) !== 'https') location.href = 'https' + location.href.substr(4, location.href.length - 4)
 const socket = io()
-
 let producer = null
-
-nameInput.value = 'user_' + Math.round(Math.random() * 1000)
+let rc = null
 
 socket.request = function request(type, data = {}) {
     return new Promise((resolve, reject) => {
@@ -19,36 +15,24 @@ socket.request = function request(type, data = {}) {
     })
 }
 
-let rc = null
-
 function joinRoom(name, room_id) {
     if (rc && rc.isOpen()) {
         console.log('Already connected to a room')
     } else {
+        let localMedia = document.getElementById("localMedia");
+        let remoteVideos = document.getElementById("remoteVideos");
+        let remoteAudios = document.getElementById("remoteAudios");
+
         rc = new RoomClient(localMedia, remoteVideos, remoteAudios, window.mediasoupClient, socket, room_id, name, roomOpen)
-        rc.produce(mediaType.audio)
-        rc.produce(mediaType.video)
-        addListeners()
     }
 }
 
 function roomOpen() {
-    reveal(startAudioButton)
-    hide(stopAudioButton)
-    reveal(startVideoButton)
-    hide(stopVideoButton)
-    reveal(startScreenButton)
-    hide(stopScreenButton)
-    reveal(exitButton)
-    control.className = ''
-    reveal(videoMedia)
+    rc.produce(mediaType.audio);
+    rc.produce(mediaType.video);
 }
 
-function goGoDeviceList() {
-    login.style.display = "none"
-    initEnumerateDevices();
-    //joinRoom(nameInput.value, roomidInput.value)
-}
+//////////////// 未使用 //////////////////
 
 function hide(elem) {
     elem.className = 'hidden'
@@ -74,13 +58,12 @@ function addListeners() {
         reveal(startAudioButton)
     })
     rc.on(RoomClient.EVENTS.startAudio, () => {
-        hide(startAudioButton)
-        reveal(stopAudioButton)
+        console.log("event startAudio");
     })
 
     rc.on(RoomClient.EVENTS.startVideo, () => {
-        hide(startVideoButton)
-        reveal(stopVideoButton)
+        console.log("event startVideo");
+
     })
     rc.on(RoomClient.EVENTS.stopVideo, () => {
         hide(stopVideoButton)
@@ -93,49 +76,4 @@ function addListeners() {
         hide(devicesButton)
         reveal(login)
     })
-}
-
-let isEnumerateDevices = false
-
-function initEnumerateDevices() {
-    // Many browsers, without the consent of getUserMedia, cannot enumerate the devices.
-    if (isEnumerateDevices) return
-
-    const constraints = {
-        audio: true,
-        video: true
-    }
-
-    navigator.mediaDevices
-        .getUserMedia(constraints)
-        .then((stream) => {
-            enumerateDevices()
-            stream.getTracks().forEach(function(track) {
-                track.stop()
-            })
-        })
-        .catch((err) => {
-            console.error('Access denied for audio/video: ', err)
-        })
-}
-
-function enumerateDevices() {
-    // Load mediaDevice options
-    navigator.mediaDevices.enumerateDevices().then((devices) =>
-        devices.forEach((device) => {
-            let el = null
-            if ('audioinput' === device.kind) {
-                el = audioSelect
-            } else if ('videoinput' === device.kind) {
-                el = videoSelect
-            }
-            if (!el) return
-
-            let option = document.createElement('option')
-            option.value = device.deviceId
-            option.innerText = device.label
-            el.appendChild(option)
-            isEnumerateDevices = true
-        })
-    )
 }

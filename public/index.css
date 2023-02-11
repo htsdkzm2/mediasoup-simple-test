@@ -163,8 +163,7 @@ input[type=password]:focus {
     outline-offset: 0;
 }
 
-input[type=button],
-input[type=submit] {
+#submitButton {
     padding: 0 18px;
     height: 29px;
     font-size: 12px;
@@ -187,8 +186,7 @@ input[type=submit] {
     box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
-input[type=button]:active,
-input[type=submit]:active {
+#submitButton:active {
     background: #cde5ef;
     border-color: #9eb9c2 #b3c0c8 #b4ccce;
     -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);

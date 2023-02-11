@@ -1,10 +1,12 @@
 var roomName;
 var userName;
-const { useState } = React
+
+let isEnumerateDevices = false
+document.getElementById("nameInput").value = 'user_' + Math.round(Math.random() * 1000)
 
 function Modal() {
     return (
-        <div>
+        <div id="deviceListView">
             <div id="modalOverlay"></div>
             <div className='enter-room-modal dialog fade-in'>
                 <form>
@@ -16,11 +18,28 @@ function Modal() {
                     <select id="videoSelect">
                     </select>
                     <br />
-                    <input id="submitButton" type='submit' value='Enter room'/>
+                    <input type="button" value="change Device" onClick={() => changeDevice()} />
+                    <br />
+                    <input id="enterRoomButton" type='submit' value='Enter room' onClick={() => renderReactMeetingRoom()} />
                 </form>
                 <div className='video-container' id="previewVideo">
-                    <button onClick={() => changeDevice()}>Click</button>
                 </div>
+            </div>
+        </div>
+    )
+}
+
+function RoomContainer() {
+    return (
+        <div className="container">
+            <div id="videoMedia">
+                <h4><i className="fab fa-youtube"></i> Local media</h4>
+                <div id="localMedia" className="containers">
+                </div>
+                <br />
+                <h4><i className="fab fa-youtube"></i> Remote media</h4>
+                <div id="remoteVideos" className="containers"></div>
+                <div id="remoteAudios"></div>
             </div>
         </div>
     )
@@ -28,20 +47,33 @@ function Modal() {
 
 function App() {
     return (
-        <div>
-            <Modal />
-        </div>
+        <Modal />
     )
 }
 
 function renderReact() {
+    roomName = document.getElementById("roomInput").value;
+    userName = document.getElementById("nameInput").value;
+    console.log(roomName, userName)
     document.getElementById("login").style.display = "none";
     ReactDOM.render(<App />, document.getElementById('root'))
     deviceLoad();
 }
 
+function renderReactMeetingRoom() {
+    document.getElementById("deviceListView").style.display = "none";
+    ReactDOM.render(<RoomContainer />, document.getElementById('root'), () => {
+        joinRoom(userName, roomName);
+      });
+    window.stream.getTracks().forEach( (camera) => {
+        camera.stop();
+        console.log("camera stop");
+      });
+}
+
 function deviceLoad() {
-    createVideoPreView()
+    createVideoPreView();
+    initEnumerateDevices();
 }
 function createVideoPreView() {
     let video = document.createElement('video');
@@ -86,3 +118,46 @@ function playVideo(element, stream) {// videoタグにstreamを映す
     var videoSelect = document.getElementById("videoSelect");
     getMedia(videoSelect.value, audioSelect.value);
   }
+
+function initEnumerateDevices() {
+    // Many browsers, without the consent of getUserMedia, cannot enumerate the devices.
+    if (isEnumerateDevices) return
+
+    const constraints = {
+        audio: true,
+        video: true
+    }
+
+    navigator.mediaDevices
+        .getUserMedia(constraints)
+        .then((stream) => {
+            enumerateDevices()
+            stream.getTracks().forEach(function(track) {
+                track.stop()
+            })
+        })
+        .catch((err) => {
+            console.error('Access denied for audio/video: ', err)
+        })
+}
+
+function enumerateDevices() {
+    // Load mediaDevice options
+    navigator.mediaDevices.enumerateDevices().then((devices) =>
+        devices.forEach((device) => {
+            let el = null
+            if ('audioinput' === device.kind) {
+                el = audioSelect
+            } else if ('videoinput' === device.kind) {
+                el = videoSelect
+            }
+            if (!el) return
+
+            let option = document.createElement('option')
+            option.value = device.deviceId
+            option.innerText = device.label
+            el.appendChild(option)
+            isEnumerateDevices = true
+        })
+    )
+}
