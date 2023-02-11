@@ -1,7 +1,17 @@
-// if (location.href.substr(0, 5) !== 'https') location.href = 'https' + location.href.substr(4, location.href.length - 4)
 const socket = io()
 let producer = null
 let rc = null
+let localMedia = document.createElement("div");
+let remoteVideos = document.createElement("div");
+let remoteAudios = document.createElement("div");
+let isScreenSharing = false;
+let isShowingVideo = false;
+let isShowingAudio = false;
+let selectedDeviceVideoID;
+let selectedDeviceAudioID;
+
+const PARTICIPANT_MAIN_CLASS = 'participant main';
+const PARTICIPANT_CLASS = 'participant';
 
 socket.request = function request(type, data = {}) {
     return new Promise((resolve, reject) => {
@@ -15,65 +25,134 @@ socket.request = function request(type, data = {}) {
     })
 }
 
+function appendElembeforeJoin(audioId, videoId) {
+    new Promise((resolve) => {
+        let participants = document.getElementById("participants");
+        localMedia.id = "localMedia";
+        remoteVideos.id = "remoteVideos";
+        remoteAudios.id = "remoteAudios";
+        //localMedia.className = PARTICIPANT_MAIN_CLASS;
+        // remoteVideos.className = PARTICIPANT_CLASS;
+        remoteVideos.style.display = "none"
+        participants.appendChild(localMedia);
+        participants.appendChild(remoteVideos);
+        participants.appendChild(remoteAudios);
+        selectedDeviceAudioID = audioId
+        selectedDeviceVideoID = videoId
+        resolve();
+      }).then(() => {
+        joinRoom(userName, roomName);
+      });
+}   
+
 function joinRoom(name, room_id) {
     if (rc && rc.isOpen()) {
         console.log('Already connected to a room')
     } else {
-        let localMedia = document.getElementById("localMedia");
-        let remoteVideos = document.getElementById("remoteVideos");
-        let remoteAudios = document.getElementById("remoteAudios");
-
         rc = new RoomClient(localMedia, remoteVideos, remoteAudios, window.mediasoupClient, socket, room_id, name, roomOpen)
+        //settingSwicthVideos(localMedia);
+        //settingSwicthVideos(remoteVideos);
+        addListeners();
     }
 }
 
 function roomOpen() {
-    rc.produce(mediaType.audio);
-    rc.produce(mediaType.video);
+    rc.produce(mediaType.audio, selectedDeviceAudioID);
+    rc.produce(mediaType.video, selectedDeviceVideoID);
 }
 
-//////////////// 未使用 //////////////////
-
-function hide(elem) {
-    elem.className = 'hidden'
+function screenSharing() {
+    if (!isScreenSharing) {
+        rc.produce(RoomClient.mediaType.screen);
+    } else {
+        rc.closeProducer(RoomClient.mediaType.screen);
+    }
 }
 
-function reveal(elem) {
-    elem.style.display = "block";
+function startScreenHandler() {
+    isScreenSharing = true;
+    const screenButton = document.getElementById("screenShareOnOffButton");
+    screenButton.firstElementChild.textContent = "stop_screen_share";
 }
+
+function closeScreenHandler() {
+    isScreenSharing = false;
+    const screenButton = document.getElementById("screenShareOnOffButton");
+    screenButton.firstElementChild.textContent = "screen_share";
+}
+
+function didTapVideoButton() {
+    if (!isShowingVideo) {
+        rc.produce(RoomClient.mediaType.video);
+    } else {
+        rc.closeProducer(RoomClient.mediaType.video);
+    }
+}
+
+function didTapAudioButton() {
+
+    socket.emit('didTapAudioMuteButton', socket.id, isShowingAudio)
+    if (!isShowingAudio) {
+        rc.produce(RoomClient.mediaType.audio);
+    } else {
+        rc.closeProducer(RoomClient.mediaType.audio);
+    }
+}
+
+function didTapExitButton() {
+    rc.exit();
+}
+
+function didTapExitButton() {
+    rc.exit();
+}
+
+// function switchContainerClass(container) {
+//     if (container.className === PARTICIPANT_CLASS) {
+//         var elements = Array.prototype.slice.call(document.getElementsByClassName(PARTICIPANT_MAIN_CLASS));
+//         elements.forEach(function(item) {
+//             item.className = PARTICIPANT_CLASS;
+//         });
+//         container.className = PARTICIPANT_MAIN_CLASS;
+//     } else {
+//         container.className = PARTICIPANT_CLASS;
+//     }
+// }
+
+// function settingSwicthVideos(elem) {
+//     elem.onclick = function(){
+//         switchContainerClass(elem);
+//       };
+// }
 
 function addListeners() {
     rc.on(RoomClient.EVENTS.startScreen, () => {
-        hide(startScreenButton)
-        reveal(stopScreenButton)
+        startScreenHandler();
     })
-
     rc.on(RoomClient.EVENTS.stopScreen, () => {
-        hide(stopScreenButton)
-        reveal(startScreenButton)
-    })
-
-    rc.on(RoomClient.EVENTS.stopAudio, () => {
-        hide(stopAudioButton)
-        reveal(startAudioButton)
+        closeScreenHandler();
     })
     rc.on(RoomClient.EVENTS.startAudio, () => {
-        console.log("event startAudio");
+        isShowingAudio = true;
+        const screenButton = document.getElementById("micOnOffButton");
+        screenButton.firstElementChild.textContent = "mic";
     })
-
+    rc.on(RoomClient.EVENTS.stopAudio, () => {
+        isShowingAudio = false;
+        const screenButton = document.getElementById("micOnOffButton");
+        screenButton.firstElementChild.textContent = "mic_off";
+    })
     rc.on(RoomClient.EVENTS.startVideo, () => {
-        console.log("event startVideo");
-
+        isShowingVideo = true;
+        const screenButton = document.getElementById("videoOnOffButton");
+        screenButton.firstElementChild.textContent = "videocam";
     })
     rc.on(RoomClient.EVENTS.stopVideo, () => {
-        hide(stopVideoButton)
-        reveal(startVideoButton)
+        isShowingVideo = false;
+        const screenButton = document.getElementById("videoOnOffButton");
+        screenButton.firstElementChild.textContent = "videocam_off";
     })
     rc.on(RoomClient.EVENTS.exitRoom, () => {
-        hide(control)
-        hide(devicesList)
-        hide(videoMedia)
-        hide(devicesButton)
-        reveal(login)
+        location.reload();
     })
 }

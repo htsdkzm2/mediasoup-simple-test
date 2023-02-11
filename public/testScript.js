@@ -1,5 +1,7 @@
 var roomName;
 var userName;
+const rootContainer = document.getElementById("root");
+const createRoot = ReactDOM.createRoot(rootContainer);
 
 let isEnumerateDevices = false
 document.getElementById("nameInput").value = 'user_' + Math.round(Math.random() * 1000)
@@ -29,23 +31,10 @@ function Modal() {
     )
 }
 
-function RoomContainer() {
-    return (
-        <div className="container">
-            <div id="videoMedia">
-                <h4><i className="fab fa-youtube"></i> Local media</h4>
-                <div id="localMedia" className="containers">
-                </div>
-                <br />
-                <h4><i className="fab fa-youtube"></i> Remote media</h4>
-                <div id="remoteVideos" className="containers"></div>
-                <div id="remoteAudios"></div>
-            </div>
-        </div>
-    )
-}
-
 function App() {
+    React.useEffect(() => {
+        deviceLoad()
+    });
     return (
         <Modal />
     )
@@ -56,18 +45,47 @@ function renderReact() {
     userName = document.getElementById("nameInput").value;
     console.log(roomName, userName)
     document.getElementById("login").style.display = "none";
-    ReactDOM.render(<App />, document.getElementById('root'))
-    deviceLoad();
+    createRoot.render(<App />);
+}
+
+function RoomContainer() {
+    let audioId = document.getElementById("audioSelect").value;
+    let videoId = document.getElementById("videoSelect").value;
+
+    React.useEffect(() => {
+        appendElembeforeJoin(audioId, videoId)
+    });
+    return (
+        <div>
+            <div className="container">
+                <div id="participants"></div>
+            </div>
+            <footer>
+                <div className="media-control-bar">
+                    <button className="media-control-button" id="videoOnOffButton" onClick={ () => didTapVideoButton() }>
+                        <i className="material-icons">videocam</i>
+                    </button>
+                    <button className="media-control-button" id="micOnOffButton" onClick={ () => didTapAudioButton() }>
+                        <i className="material-icons">mic</i>
+                    </button>
+                    <button className="media-control-button" id="screenShareOnOffButton" onClick={ () => screenSharing() }>
+                        <i className="material-icons">screen_share</i>
+                    </button>
+                    <button className="media-control-button" id="exitRoomButton" onClick={ ()=> didTapExitButton()}>
+                        <i className="material-icons">call_end</i>
+                    </button>
+                </div>
+            </footer>
+        </div>
+    )
 }
 
 function renderReactMeetingRoom() {
     document.getElementById("deviceListView").style.display = "none";
-    ReactDOM.render(<RoomContainer />, document.getElementById('root'), () => {
-        joinRoom(userName, roomName);
-      });
+    createRoot.render(<RoomContainer />);
+      
     window.stream.getTracks().forEach( (camera) => {
         camera.stop();
-        console.log("camera stop");
       });
 }
 

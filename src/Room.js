@@ -26,7 +26,8 @@ module.exports = class Room {
     this.peers.forEach((peer) => {
       peer.producers.forEach((producer) => {
         producerList.push({
-          producer_id: producer.id
+          producer_id: producer.id,
+          producer_socket_id: peer.id
         })
       })
     })
@@ -91,7 +92,7 @@ module.exports = class Room {
       async function (resolve, reject) {
         let producer = await this.peers.get(socket_id).createProducer(producerTransportId, rtpParameters, kind)
         resolve(producer.id)
-        this.broadCast(socket_id, 'newProducers', [
+        this.broadCast(socket_id, 'alreadyProducersForNewProducers', [
           {
             producer_id: producer.id,
             producer_socket_id: socket_id
@@ -163,5 +164,14 @@ module.exports = class Room {
       id: this.id,
       peers: JSON.stringify([...this.peers])
     }
+  }
+
+  changeAudio(socket_id, isShowingAudio) {
+    this.broadCast(socket_id, 'audioMute', 
+      {
+        socketID: socket_id,
+        isShowingAudio: isShowingAudio
+      }
+    )
   }
 }

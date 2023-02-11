@@ -115,7 +115,6 @@ io.on('connection', (socket) => {
 
     // send all the current producer to newly joined member
     let producerList = roomList.get(socket.room_id).getProducerListForPeer()
-
     socket.emit('newProducers', producerList)
   })
 
@@ -186,6 +185,8 @@ io.on('connection', (socket) => {
       producer_id: `${producerId}`,
       consumer_id: `${params.id}`
     })
+    params.peerList = roomList.get(socket.room_id).toJson()
+    console.log("peerList; ", roomList.get(socket.room_id).toJson())
 
     callback(params)
   })
@@ -236,6 +237,10 @@ io.on('connection', (socket) => {
     socket.room_id = null
 
     callback('successfully exited room')
+  })
+
+  socket.on('didTapAudioMuteButton', (socketID, isShowingAudio) => {
+    roomList.get(socket.room_id).changeAudio(socketID, isShowingAudio)
   })
 })
 
