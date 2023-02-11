@@ -165,4 +165,13 @@ module.exports = class Room {
       peers: JSON.stringify([...this.peers])
     }
   }
+
+  changeAudio(socket_id, isShowingAudio) {
+    this.broadCast(socket_id, 'audioMute', 
+      {
+        socketID: socket_id,
+        isShowingAudio: isShowingAudio
+      }
+    )
+  }
 }

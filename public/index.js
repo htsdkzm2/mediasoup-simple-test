@@ -31,7 +31,7 @@ function appendElembeforeJoin(audioId, videoId) {
         localMedia.id = "localMedia";
         remoteVideos.id = "remoteVideos";
         remoteAudios.id = "remoteAudios";
-        localMedia.className = PARTICIPANT_MAIN_CLASS;
+        //localMedia.className = PARTICIPANT_MAIN_CLASS;
         // remoteVideos.className = PARTICIPANT_CLASS;
         remoteVideos.style.display = "none"
         participants.appendChild(localMedia);
@@ -91,6 +91,7 @@ function didTapVideoButton() {
 
 function didTapAudioButton() {
 
+    socket.emit('didTapAudioMuteButton', socket.id, isShowingAudio)
     if (!isShowingAudio) {
         rc.produce(RoomClient.mediaType.audio);
     } else {

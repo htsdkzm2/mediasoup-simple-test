@@ -281,6 +281,21 @@ class RoomClient {
                 this.exit(true)
             }.bind(this)
         )
+
+        this.socket.on(
+            'audioMute',
+            function(data) {
+                console.log('data is', data.length);
+                
+                if (data.isShowingAudio) {
+                    // TODO: divのidか何かをsocketIDにして、対象のdivを取得してmuteの画像を取得
+                    console.log(data.socketID, "がmuteしたよ！！！")
+                } else {
+                    // TODO: divのidか何かをsocketIDにして、対象のdivを取得してmute画像を取り除く
+                    console.log(data.socketID, "がunMuteしたよ！！！")
+                }
+            }.bind(this)
+        )
     }
 
     //////// MAIN FUNCTIONS /////////////
@@ -446,7 +461,7 @@ class RoomClient {
                     nameTag = document.createElement('p')
                     elem = document.createElement('video')
 
-                    div.className = 'participant'
+                    //div.className = 'participant'
                     elem.setAttribute("name", participantUserName);
                     elem.srcObject = stream
                     elem.id = consumer.id

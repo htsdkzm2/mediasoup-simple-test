@@ -238,6 +238,10 @@ io.on('connection', (socket) => {
 
     callback('successfully exited room')
   })
+
+  socket.on('didTapAudioMuteButton', (socketID, isShowingAudio) => {
+    roomList.get(socket.room_id).changeAudio(socketID, isShowingAudio)
+  })
 })
 
 // TODO remove - never used?
