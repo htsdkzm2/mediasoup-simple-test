@@ -79,3 +79,22 @@
     width: 50%;
     height: 10%;
 }
+
+.wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.user1Line {
+    width: 100vw;
+    /* width: calc((100% - 30px * 2) / 2); */
+}
+
+/* .user2Line {
+    flex: 0 1 auto;
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
+} */

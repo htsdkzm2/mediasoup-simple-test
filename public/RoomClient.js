@@ -454,7 +454,9 @@ class RoomClient {
                 let div
                 let nameTag
                 let elem
-                userList.push(participantUserName)
+                if (userList.indexOf(participantUserName) == -1){
+                    userList.push(participantUserName);
+                }
 
                 if (kind === 'video') {
                     div = document.createElement('div')
@@ -475,6 +477,7 @@ class RoomClient {
                     div.appendChild(elem)
                     div.appendChild(nameTag)
                     this.remoteVideoEl.appendChild(div)
+                    this.resizeVideo(userList)
                     //this.handleFS(elem.id)
                 } else {
                     elem = document.createElement('audio')
@@ -551,6 +554,19 @@ class RoomClient {
             kind,
             participantUserName
         }
+    }
+
+    async resizeVideo(roomInfo) {
+        // TODO: remoteVideoをどう扱うか
+        // 案１：remteVideoにappendするのではなく一つのwrapクラスにvideoのdivはまとめてしまう
+        let elements = document.getElementsByClassName('user1Line');
+        for (var i = 0, l = elements.length; i < l; i++) {
+            elements[i].style.width = 'calc((100% - 30px * 2) / 2)';
+            elements[i].style.heigth = '100%';
+        }
+        // elements.map(function(e) {
+        //     return console.log('きとるがな')
+        // })
     }
 
     closeProducer(type) {

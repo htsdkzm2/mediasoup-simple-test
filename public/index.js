@@ -31,6 +31,8 @@ function appendElembeforeJoin(audioId, videoId) {
         localMedia.id = "localMedia";
         remoteVideos.id = "remoteVideos";
         remoteAudios.id = "remoteAudios";
+        localMedia.className = 'user1Line';
+        remoteVideos.className = 'user1Line';
         //localMedia.className = PARTICIPANT_MAIN_CLASS;
         // remoteVideos.className = PARTICIPANT_CLASS;
         remoteVideos.style.display = "none"
@@ -141,6 +143,7 @@ function addListeners() {
         isShowingAudio = false;
         const screenButton = document.getElementById("micOnOffButton");
         screenButton.firstElementChild.textContent = "mic_off";
+        document.getElementsByClassName('vid').style.display = 'none';
     })
     rc.on(RoomClient.EVENTS.startVideo, () => {
         isShowingVideo = true;

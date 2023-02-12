@@ -58,7 +58,7 @@ function RoomContainer() {
     return (
         <div>
             <div className="container">
-                <div id="participants"></div>
+                <div id="participants" className='wrap'></div>
             </div>
             <footer>
                 <div className="media-control-bar">
