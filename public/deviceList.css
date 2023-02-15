@@ -80,21 +80,35 @@
     height: 10%;
 }
 
+/* ///////////  reize絡みのクラス名  ///////// */
+
 .wrap {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
+
 }
 
-.user1Line {
+.userLine1 {
     width: 100vw;
-    /* width: calc((100% - 30px * 2) / 2); */
+    height: calc(100% - (30px * 2));
+    padding: 10px;
 }
 
-/* .user2Line {
-    flex: 0 1 auto;
-    height: 100%;
-    width: 100%;
-    border-radius: 10px;
-    cursor: pointer;
-} */
+.userLine2 {
+    width: calc((100% - 30px * 2) / 2);
+    height: 100vh;
+    padding: 10px;
+}
+
+.userLine3, .userLine4 {
+    width: calc((100% - 30px * 2) / 2);
+    height: calc((100% - 30px * 2) / 2);
+    padding: 10px;
+}
+
+.userLine5, .userLine6 {
+    width: calc((100% - 30px * 2) / 3);
+    height: calc((100% - 30px * 2) / 2);
+    padding: 10px;
+}
