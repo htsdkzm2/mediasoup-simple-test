@@ -19,10 +19,10 @@ let myName;
 let userList = [];
 
 class RoomClient {
-    constructor(localMediaEl, remoteVideoEl, remoteAudioEl, mediasoupClient, socket, room_id, name, successCallback) {
+    constructor(localMediaEl, container, remoteAudioEl, mediasoupClient, socket, room_id, name, successCallback) {
         this.name = name
         this.localMediaEl = localMediaEl
-        this.remoteVideoEl = remoteVideoEl
+        this.container = container
         this.remoteAudioEl = remoteAudioEl
         this.mediasoupClient = mediasoupClient
         this.successCallback = successCallback
@@ -240,9 +240,11 @@ class RoomClient {
             'consumerClosed',
             function({ consumer_id }) {
                 console.log('Closing consumer:', consumer_id)
-                if (document.getElementById("remoteVideos").childElementCount == 0) {
-                    this.remoteVideoEl.style.display = "none"
-                }
+                // if (document.getElementsByClassName('remoteVideo').length == 0) {
+                //     // TODO: 要確認
+                //     //this.remoteVideoEl.style.display = "none"
+                //     document.getElementsByClassName('remoteVideo').style.display = "none"
+                // }
                 this.removeConsumer(consumer_id)
             }.bind(this)
         )
@@ -305,6 +307,10 @@ class RoomClient {
         let audio = false
         let video = false
         let screen = false
+        if (userList.indexOf(myName) == -1){
+            userList.push(myName);
+        }
+        
         switch (type) {
             case mediaType.audio:
                 mediaConstraints = {
@@ -454,16 +460,12 @@ class RoomClient {
                 let div
                 let nameTag
                 let elem
-                if (userList.indexOf(participantUserName) == -1){
-                    userList.push(participantUserName);
-                }
 
                 if (kind === 'video') {
                     div = document.createElement('div')
                     nameTag = document.createElement('p')
                     elem = document.createElement('video')
 
-                    //div.className = 'participant'
                     elem.setAttribute("name", participantUserName);
                     elem.srcObject = stream
                     elem.id = consumer.id
@@ -472,12 +474,12 @@ class RoomClient {
                     elem.className = 'vid'
                     nameTag.textContent = participantUserName
                     //elem.controls = true
-                    this.remoteVideoEl.style.display = "block"
 
                     div.appendChild(elem)
                     div.appendChild(nameTag)
-                    this.remoteVideoEl.appendChild(div)
-                    this.resizeVideo(userList)
+                    this.container.appendChild(div)
+
+                    this.resizeVideo(this.container, userList)
                     //this.handleFS(elem.id)
                 } else {
                     elem = document.createElement('audio')
@@ -534,7 +536,10 @@ class RoomClient {
             return e[1].name
         })
         let participantUserName = participantsList[0]
-        // console.log('///// participantsList name is ', participantsList);
+        if (userList.indexOf(participantUserName) == -1){
+            userList.push(participantUserName);
+        }
+        console.log('///// participantsList name is ', userList);
         
         let codecOptions = {}
         const consumer = await this.consumerTransport.consume({
@@ -556,13 +561,11 @@ class RoomClient {
         }
     }
 
-    async resizeVideo(roomInfo) {
-        // TODO: remoteVideoをどう扱うか
-        // 案１：remteVideoにappendするのではなく一つのwrapクラスにvideoのdivはまとめてしまう
-        let elements = document.getElementsByClassName('user1Line');
+    async resizeVideo(container, roomInfo) {
+        let elements = container.children;
+
         for (var i = 0, l = elements.length; i < l; i++) {
-            elements[i].style.width = 'calc((100% - 30px * 2) / 2)';
-            elements[i].style.heigth = '100%';
+            elements[i].className = "userLine" + elements.length;
         }
         // elements.map(function(e) {
         //     return console.log('きとるがな')

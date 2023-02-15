@@ -2,8 +2,8 @@ const socket = io()
 let producer = null
 let rc = null
 let localMedia = document.createElement("div");
-let remoteVideos = document.createElement("div");
-let remoteAudios = document.createElement("div");
+let remoteAudios;
+let participants;
 let isScreenSharing = false;
 let isShowingVideo = false;
 let isShowingAudio = false;
@@ -25,20 +25,14 @@ socket.request = function request(type, data = {}) {
     })
 }
 
-function appendElembeforeJoin(audioId, videoId) {
+function appendElemBeforeJoin(audioId, videoId) {
     new Promise((resolve) => {
-        let participants = document.getElementById("participants");
+        participants = document.getElementById("participants");
+        localMedia.className = "userLine1"
         localMedia.id = "localMedia";
-        remoteVideos.id = "remoteVideos";
-        remoteAudios.id = "remoteAudios";
-        localMedia.className = 'user1Line';
-        remoteVideos.className = 'user1Line';
-        //localMedia.className = PARTICIPANT_MAIN_CLASS;
-        // remoteVideos.className = PARTICIPANT_CLASS;
-        remoteVideos.style.display = "none"
+        remoteAudios = document.getElementById("remoteAudios");
+        remoteAudios.style.display = "none";
         participants.appendChild(localMedia);
-        participants.appendChild(remoteVideos);
-        participants.appendChild(remoteAudios);
         selectedDeviceAudioID = audioId
         selectedDeviceVideoID = videoId
         resolve();
@@ -51,7 +45,7 @@ function joinRoom(name, room_id) {
     if (rc && rc.isOpen()) {
         console.log('Already connected to a room')
     } else {
-        rc = new RoomClient(localMedia, remoteVideos, remoteAudios, window.mediasoupClient, socket, room_id, name, roomOpen)
+        rc = new RoomClient(localMedia, participants, remoteAudios, window.mediasoupClient, socket, room_id, name, roomOpen)
         //settingSwicthVideos(localMedia);
         //settingSwicthVideos(remoteVideos);
         addListeners();
@@ -143,7 +137,6 @@ function addListeners() {
         isShowingAudio = false;
         const screenButton = document.getElementById("micOnOffButton");
         screenButton.firstElementChild.textContent = "mic_off";
-        document.getElementsByClassName('vid').style.display = 'none';
     })
     rc.on(RoomClient.EVENTS.startVideo, () => {
         isShowingVideo = true;

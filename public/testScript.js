@@ -53,12 +53,13 @@ function RoomContainer() {
     let videoId = document.getElementById("videoSelect").value;
 
     React.useEffect(() => {
-        appendElembeforeJoin(audioId, videoId)
+        appendElemBeforeJoin(audioId, videoId)
     });
     return (
         <div>
             <div className="container">
                 <div id="participants" className='wrap'></div>
+                <div id="remoteAudios"></div>
             </div>
             <footer>
                 <div className="media-control-bar">
