@@ -14,6 +14,18 @@ const _EVENTS = {
     stopScreen: 'stopScreen'
 }
 
+function getCssElement(len) {
+    if (len == 1){
+        return "userLine1"
+    } else if (2 <= len < 6) {
+        return "userLine2"
+      } else if (7 <= len < 12) {
+        return "userLine3"
+      } else {
+        return "userLine4"
+      }
+}
+
 let roomList = new Map()
 let myName;
 let userList = [];
@@ -245,7 +257,12 @@ class RoomClient {
                 //     //this.remoteVideoEl.style.display = "none"
                 //     document.getElementsByClassName('remoteVideo').style.display = "none"
                 // }
-                this.removeConsumer(consumer_id)
+                let isVideo = (document.getElementById(consumer_id).className == 'vid')
+                console.log(isVideo)
+
+                this.removeConsumer(consumer_id);
+                this.resizeVideo(this.container, isVideo)
+
             }.bind(this)
         )
 
@@ -479,7 +496,7 @@ class RoomClient {
                     div.appendChild(nameTag)
                     this.container.appendChild(div)
 
-                    this.resizeVideo(this.container, userList)
+                    this.resizeVideo(this.container, true)
                     //this.handleFS(elem.id)
                 } else {
                     elem = document.createElement('audio')
@@ -496,14 +513,23 @@ class RoomClient {
                 consumer.on(
                     'trackended',
                     function() {
+                        let isVideo = (document.getElementById(consumer.id).className == 'vid')
+                        console.log(isVideo)
                         this.removeConsumer(consumer.id)
+                        this.resizeVideo(this.container, isVideo)
+
                     }.bind(this)
                 )
 
                 consumer.on(
                     'transportclose',
                     function() {
+                        let isVideo = (document.getElementById(consumer.id).className == 'vid')
+                        console.log(isVideo)
+
                         this.removeConsumer(consumer.id)
+                        this.resizeVideo(this.container, isVideo)
+
                     }.bind(this)
                 )
             }.bind(this)
@@ -561,15 +587,13 @@ class RoomClient {
         }
     }
 
-    async resizeVideo(container, roomInfo) {
+    async resizeVideo(container, isVideo) {
+        if (!isVideo) { return }
         let elements = container.children;
-
+        let cssElement = getCssElement(elements.length);
         for (var i = 0, l = elements.length; i < l; i++) {
-            elements[i].className = "userLine" + elements.length;
+            elements[i].className = cssElement;
         }
-        // elements.map(function(e) {
-        //     return console.log('きとるがな')
-        // })
     }
 
     closeProducer(type) {

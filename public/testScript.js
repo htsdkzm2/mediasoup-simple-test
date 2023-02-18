@@ -56,7 +56,7 @@ function RoomContainer() {
         appendElemBeforeJoin(audioId, videoId)
     });
     return (
-        <div>
+        <div className="wrapContainer">
             <div className="container">
                 <div id="participants" className='wrap'></div>
                 <div id="remoteAudios"></div>

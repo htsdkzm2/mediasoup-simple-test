@@ -1,4 +1,10 @@
+html {
+    height: 100%;
+  }
+  
 body {
+    height: 100%;
+    margin: 0;
     font: 13px/20px "Lucida Grande", Tahoma, Verdana, sans-serif;
     color: #404040;
     background: #dffcff;
@@ -550,7 +556,7 @@ a.hovertext:focus:after {
 
   footer {
     position: fixed;
-    bottom: 5vh;
+    bottom: 0px;
     width: 100%;
     height: 10%;
   }
@@ -558,3 +564,4 @@ a.hovertext:focus:after {
   #exitRoomButton {
     color: red;
   }
+  

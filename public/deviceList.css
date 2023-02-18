@@ -82,33 +82,66 @@
 
 /* ///////////  reize絡みのクラス名  ///////// */
 
+.wrapContainer {
+    position: relative;
+}
+
 .wrap {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-
 }
 
+/* 一人の時 */
 .userLine1 {
-    width: 100vw;
-    height: calc(100% - (30px * 2));
+    width: auto;
+    height: 90vh;
     padding: 10px;
+    flex: 0 0 auto;
+    position: relative;
+}
+/* 2-6人の時 */
+.userLine2  {
+    width: auto;
+    height: 47vh;
+    align-content: center;
+    padding: 10px;
+    flex: 0 0 auto;
+    position: relative;
+}
+/* ３行以上の時(7 - 12) */
+.userLine3  {
+    width: auto;
+    height: 27vh;
+    align-content: center;
+    padding: 10px;
+    flex: 0 0 auto;
+    position: relative;
+}
+/* 一4行以上の時(13 - ) */
+.userLine4  {
+    width: auto;
+    height: 20vh;
+    align-content: center;
+    padding: 10px;
+    flex: 0 0 auto;
+    position: relative;
 }
 
-.userLine2 {
-    width: calc((100% - 30px * 2) / 2);
-    height: 100vh;
-    padding: 10px;
+.wrap > div >  p {
+    display: block;
+    position: absolute;
+    left: 20px;
+    top: 0px;
+    z-index: 9;
+    max-width: 80%;
+    text-overflow: ellipsis;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: black;
+    text-shadow: 0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff,0 0 10px #fff;
 }
 
-.userLine3, .userLine4 {
-    width: calc((100% - 30px * 2) / 2);
-    height: calc((100% - 30px * 2) / 2);
-    padding: 10px;
-}
-
-.userLine5, .userLine6 {
-    width: calc((100% - 30px * 2) / 3);
-    height: calc((100% - 30px * 2) / 2);
-    padding: 10px;
+.root, .wrapContainer {
+    height: 100%;
 }

@@ -18,9 +18,9 @@
   cursor: pointer;
 }
 
-/* .container {
-  display: flex;
-} */
+.container {
+  height: 90%;
+}
 
 .vid {
   flex: 0 1 auto;
