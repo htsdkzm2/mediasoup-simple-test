@@ -258,11 +258,8 @@ class RoomClient {
                 //     document.getElementsByClassName('remoteVideo').style.display = "none"
                 // }
                 let isVideo = (document.getElementById(consumer_id).className == 'vid')
-                console.log(isVideo)
-
                 this.removeConsumer(consumer_id);
                 this.resizeVideo(this.container, isVideo)
-
             }.bind(this)
         )
 
@@ -286,7 +283,7 @@ class RoomClient {
         this.socket.on(
             'alreadyProducersForNewProducers',
             async function(data) {
-                console.log('///////////alreadyProducersForNewProducers', data)
+                // console.log('///////////alreadyProducersForNewProducers', data)
                 for (let { producer_id, producer_socket_id }
                     of data) {
                     await this.consume(producer_id, producer_socket_id)
@@ -528,10 +525,8 @@ class RoomClient {
                     'trackended',
                     function() {
                         let isVideo = (document.getElementById(consumer.id).className == 'vid')
-                        console.log(isVideo)
                         this.removeConsumer(consumer.id)
                         this.resizeVideo(this.container, isVideo)
-
                     }.bind(this)
                 )
 
@@ -539,8 +534,6 @@ class RoomClient {
                     'transportclose',
                     function() {
                         let isVideo = (document.getElementById(consumer.id).className == 'vid')
-                        console.log(isVideo)
-
                         this.removeConsumer(consumer.id)
                         this.resizeVideo(this.container, isVideo)
 
@@ -565,7 +558,6 @@ class RoomClient {
         // {"id":"lXtNZWYy-ew5yVhNAAAt","name":"user_712","transports":{},"consumers":{},"producers":{}}]] 
 
         const obj = JSON.parse(data.peerList.peers);
-        console.log('obj', obj)
         let participantsList = obj.filter(function(e) {
             return e[1].name != myName;
         }).filter(function(element) {
@@ -579,7 +571,6 @@ class RoomClient {
         if (userList.indexOf(participantUserName) == -1){
             userList.push(participantUserName);
         }
-        console.log('///// participantsList name is ', userList);
         
         let codecOptions = {}
         const consumer = await this.consumerTransport.consume({
