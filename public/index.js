@@ -79,9 +79,9 @@ function closeScreenHandler() {
 
 function didTapVideoButton() {
     if (!isShowingVideo) {
-        rc.produce(RoomClient.mediaType.video);
+        rc.resumeProducer(RoomClient.mediaType.video);
     } else {
-        rc.closeProducer(RoomClient.mediaType.video);
+        rc.pauseProducer(RoomClient.mediaType.video);
     }
 }
 
@@ -89,9 +89,9 @@ function didTapAudioButton() {
 
     socket.emit('didTapAudioMuteButton', socket.id, isShowingAudio)
     if (!isShowingAudio) {
-        rc.produce(RoomClient.mediaType.audio);
+        rc.resumeProducer(RoomClient.mediaType.audio);
     } else {
-        rc.closeProducer(RoomClient.mediaType.audio);
+        rc.pauseProducer(RoomClient.mediaType.audio);
     }
 }
 

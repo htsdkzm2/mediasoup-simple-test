@@ -303,12 +303,18 @@ class RoomClient {
 
         this.socket.on(
             'audioMute',
-            function(data) {
-                console.log('data is', data.length);
-                
+            async function(data) {                
                 if (data.isShowingAudio) {
                     // TODO: divのidか何かをsocketIDにして、対象のdivを取得してmuteの画像を取得
-                    console.log(data.socketID, "がmuteしたよ！！！")
+                    let info = await this.roomInfo()
+                    const obj = JSON.parse(info.peers)
+                    let muteUser = obj.filter(function(e) {
+                        return e[1].id == data.socketID
+                    }).map(function(e) {
+                        return e[1].name
+                    })[0]
+                    await this.muteFunc(muteUser)
+                    console.log(muteUser, "がmuteしたよ！！！")
                 } else {
                     // TODO: divのidか何かをsocketIDにして、対象のdivを取得してmute画像を取り除く
                     console.log(data.socketID, "がunMuteしたよ！！！")
@@ -410,7 +416,7 @@ class RoomClient {
                 elem.playsinline = false
                 elem.autoplay = true
                 elem.className = 'vid'
-                elem.setAttribute("name", myName)
+                this.localMediaEl.setAttribute("name", myName)
                 nameTag.textContent = myName
                 if (screen) {
                     elem.controls = true
@@ -483,13 +489,16 @@ class RoomClient {
                     nameTag = document.createElement('p')
                     elem = document.createElement('video')
 
-                    elem.setAttribute("name", participantUserName);
+                    div.id = participantUserName
+                    elem.setAttribute("name", participantUserName)
                     elem.srcObject = stream
                     elem.id = consumer.id
                     elem.playsinline = false
                     elem.autoplay = true
                     elem.className = 'vid'
                     nameTag.textContent = participantUserName
+                    //TODO: ここはhiddenにしない
+                    nameTag.className = "hidden"
                     //elem.controls = true
 
                     div.appendChild(elem)
@@ -505,7 +514,7 @@ class RoomClient {
                     elem.id = consumer.id
                     elem.playsinline = false
                     elem.autoplay = true
-                    elem.setAttribute("name", participantUserName);
+                    elem.setAttribute("name", participantUserName)
 
                     this.remoteAudioEl.appendChild(elem)
                 }
@@ -596,6 +605,15 @@ class RoomClient {
         }
     }
 
+    async muteFunc(userName) {
+        let div = document.getElementById(userName);
+        let elem = div.children;
+
+        console.log(elem);
+        console.log(elem.length);
+
+    }
+
     closeProducer(type) {
         if (!this.producerLabel.has(type)) {
             console.log('There is no producer for this type ' + type)
@@ -622,12 +640,6 @@ class RoomClient {
         }
 
         switch (type) {
-            case mediaType.audio:
-                this.event(_EVENTS.stopAudio)
-                break
-            case mediaType.video:
-                this.event(_EVENTS.stopVideo)
-                break
             case mediaType.screen:
                 this.event(_EVENTS.stopScreen)
                 break
@@ -644,6 +656,14 @@ class RoomClient {
 
         let producer_id = this.producerLabel.get(type)
         this.producers.get(producer_id).pause()
+        switch (type) {
+            case mediaType.audio:
+                this.event(_EVENTS.stopAudio)
+                break
+            case mediaType.video:
+                this.event(_EVENTS.stopVideo)
+                break
+        }
     }
 
     resumeProducer(type) {
@@ -654,6 +674,14 @@ class RoomClient {
 
         let producer_id = this.producerLabel.get(type)
         this.producers.get(producer_id).resume()
+        switch (type) {
+            case mediaType.audio:
+                this.event(_EVENTS.startAudio)
+                break
+            case mediaType.video:
+                this.event(_EVENTS.star)
+                break
+        }
     }
 
     removeConsumer(consumer_id) {
