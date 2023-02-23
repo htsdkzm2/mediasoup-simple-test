@@ -303,21 +303,20 @@ class RoomClient {
 
         this.socket.on(
             'audioMute',
-            async function(data) {                
+            async function (data) {
+                let info = await this.roomInfo()
+                const obj = JSON.parse(info.peers)
+                let toggleAudioUser = obj.filter(function (e) {
+                    return e[1].id == data.socketID
+                }).map(function (e) {
+                    return e[1].name
+                })[0]
                 if (data.isShowingAudio) {
-                    // TODO: divのidか何かをsocketIDにして、対象のdivを取得してmuteの画像を取得
-                    let info = await this.roomInfo()
-                    const obj = JSON.parse(info.peers)
-                    let muteUser = obj.filter(function(e) {
-                        return e[1].id == data.socketID
-                    }).map(function(e) {
-                        return e[1].name
-                    })[0]
-                    await this.muteFunc(muteUser)
-                    console.log(muteUser, "がmuteしたよ！！！")
+                    await this.muteFunc(toggleAudioUser)
+                    console.log(toggleAudioUser, "がmuteしたよ！！！")
                 } else {
-                    // TODO: divのidか何かをsocketIDにして、対象のdivを取得してmute画像を取り除く
-                    console.log(data.socketID, "がunMuteしたよ！！！")
+                    await this.unMuteFunc(toggleAudioUser)
+                    console.log(toggleAudioUser, "がunMuteしたよ！！！")
                 }
             }.bind(this)
         )
@@ -488,6 +487,7 @@ class RoomClient {
                     div = document.createElement('div')
                     nameTag = document.createElement('p')
                     elem = document.createElement('video')
+                    let img = document.createElement('img')
 
                     div.id = participantUserName
                     elem.setAttribute("name", participantUserName)
@@ -497,12 +497,17 @@ class RoomClient {
                     elem.autoplay = true
                     elem.className = 'vid'
                     nameTag.textContent = participantUserName
-                    //TODO: ここはhiddenにしない
-                    nameTag.className = "hidden"
+                    img.src = 'test.jpg'; 
+                    img.alt = 'さいくん'; 
+                    img.width = 200; 
+                    img.height = 200; 
+                    img.style.display = "none";
+                    img.id = participantUserName
                     //elem.controls = true
 
                     div.appendChild(elem)
                     div.appendChild(nameTag)
+                    div.appendChild(img)
                     this.container.appendChild(div)
 
                     this.resizeVideo(this.container, true)
@@ -607,11 +612,14 @@ class RoomClient {
 
     async muteFunc(userName) {
         let div = document.getElementById(userName);
-        let elem = div.children;
+        var targetTag = div.getElementsByTagName('img')[0];
+        targetTag.style.display = "block";
+    }
 
-        console.log(elem);
-        console.log(elem.length);
-
+    async unMuteFunc(userName) {
+        let div = document.getElementById(userName);
+        var targetTag = div.getElementsByTagName('img')[0];
+        targetTag.style.display = "none";
     }
 
     closeProducer(type) {
