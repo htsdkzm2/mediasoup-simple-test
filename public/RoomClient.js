@@ -400,18 +400,25 @@ class RoomClient {
             console.log('Producer', producer)
 
             this.producers.set(producer.id, producer)
+            console.log("producerId:", producer.id) 
 
             let elem
             let nameTag
+            let muteIconImg
             if (!audio) {
                 elem = document.createElement('video')
                 nameTag = document.createElement('p')
+                muteIconImg = document.createElement('i')
 
                 elem.srcObject = stream
                 elem.id = producer.id
                 elem.playsinline = false
                 elem.autoplay = true
                 elem.className = 'vid'
+                muteIconImg.className = "fa-regular fa-microphone-slash awesomeMuteIcon"
+                muteIconImg.style.display = "none";
+                muteIconImg.id = myName
+
                 this.localMediaEl.setAttribute("name", myName)
                 nameTag.textContent = myName
                 if (screen) {
@@ -420,6 +427,7 @@ class RoomClient {
 
                 this.localMediaEl.appendChild(elem)
                 this.localMediaEl.appendChild(nameTag)
+                this.localMediaEl.appendChild(muteIconImg)
                 //this.handleFS(elem.id)
             }
 
@@ -475,6 +483,8 @@ class RoomClient {
         this.getConsumeStream(producer_id, socket_id).then(
             function({ consumer, stream, kind, participantUserName }) {
                 this.consumers.set(consumer.id, consumer)
+                let testLog = consumer.paused
+                console.log("testLog sis : ", testLog)
 
                 let div
                 let nameTag
@@ -484,7 +494,7 @@ class RoomClient {
                     div = document.createElement('div')
                     nameTag = document.createElement('p')
                     elem = document.createElement('video')
-                    let img = document.createElement('img')
+                    let muteIconImg = document.createElement('i')
 
                     div.id = participantUserName
                     elem.setAttribute("name", participantUserName)
@@ -494,17 +504,14 @@ class RoomClient {
                     elem.autoplay = true
                     elem.className = 'vid'
                     nameTag.textContent = participantUserName
-                    img.src = 'test.jpg'; 
-                    img.alt = 'さいくん'; 
-                    img.width = 200; 
-                    img.height = 200; 
-                    img.style.display = "none";
-                    img.id = participantUserName
+                    muteIconImg.className = "fa-regular fa-microphone-slash awesomeMuteIcon"
+                    muteIconImg.style.display = "none";
+                    muteIconImg.id = participantUserName
                     //elem.controls = true
 
                     div.appendChild(elem)
                     div.appendChild(nameTag)
-                    div.appendChild(img)
+                    div.appendChild(muteIconImg)
                     this.container.appendChild(div)
 
                     this.resizeVideo(this.container, true)
@@ -583,7 +590,6 @@ class RoomClient {
 
         const stream = new MediaStream()
         stream.addTrack(consumer.track)
-
         return {
             consumer,
             stream,
@@ -602,14 +608,14 @@ class RoomClient {
     }
 
     async muteFunc(userName) {
-        let div = document.getElementById(userName);
-        var targetTag = div.getElementsByTagName('img')[0];
+        let div = (userName == myName) ? document.getElementById("localMedia") : document.getElementById(userName);
+        var targetTag = div.getElementsByTagName('i')[0];
         targetTag.style.display = "block";
     }
 
     async unMuteFunc(userName) {
-        let div = document.getElementById(userName);
-        var targetTag = div.getElementsByTagName('img')[0];
+        let div = (userName == myName) ? document.getElementById("localMedia") : document.getElementById(userName);
+        var targetTag = div.getElementsByTagName('i')[0];
         targetTag.style.display = "none";
     }
 

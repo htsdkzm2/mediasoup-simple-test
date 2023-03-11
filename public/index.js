@@ -86,11 +86,12 @@ function didTapVideoButton() {
 }
 
 function didTapAudioButton() {
-
     socket.emit('didTapAudioMuteButton', socket.id, isShowingAudio)
     if (!isShowingAudio) {
+        rc.unMuteFunc(myName);
         rc.resumeProducer(RoomClient.mediaType.audio);
     } else {
+        rc.muteFunc(myName);
         rc.pauseProducer(RoomClient.mediaType.audio);
     }
 }

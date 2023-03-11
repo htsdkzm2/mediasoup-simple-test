@@ -348,150 +348,6 @@ a.hovertext:focus:after {
     opacity: 1.0;
 }
 
-#btn-close {
-    position: absolute;
-    font-size: 1.4em;
-    font-weight: bold;
-    color: rgb(255, 1, 213);
-    top: 0px;
-    left: 0px;
-    background-color: rgb(252, 5, 5);
-}
-
-#btn-close1 {
-    position: absolute;
-    font-size: 1.4em;
-    font-weight: bold;
-    color: rgb(255, 1, 213);
-    top: 0px;
-    left: 0px;
-    background-color: rgb(252, 5, 5);
-}
-
-#btn-close2 {
-    position: absolute;
-    font-size: 1.4em;
-    font-weight: bold;
-    color: rgb(255, 1, 213);
-    top: 0px;
-    left: 0px;
-    background-color: rgb(252, 5, 5);
-}
-
-#btn-close3 {
-    position: absolute;
-    font-size: 1.4em;
-    font-weight: bold;
-    color: rgb(255, 1, 213);
-    top: 0px;
-    left: 0px;
-    background-color: rgb(252, 5, 5);
-}
-
-#btn-close4 {
-    position: absolute;
-    font-size: 1.4em;
-    font-weight: bold;
-    color: rgb(255, 1, 213);
-    top: 0px;
-    left: 0px;
-    background-color: rgb(252, 5, 5);
-}
-
-#btn-close5 {
-    position: absolute;
-    font-size: 1.4em;
-    font-weight: bold;
-    color: rgb(255, 1, 213);
-    top: 0px;
-    left: 0px;
-    background-color: rgb(252, 5, 5);
-}
-
-#btn-open {
-    position: relative;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: rgb(0, 0, 0);
-    top: 0px;
-    left: 0px;
-    margin: 20px;
-    background-color: rgb(145, 240, 227);
-    border-style: none;
-    z-index: 110;
-    cursor: pointer;
-}
-
-#btn-open1 {
-    position: relative;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: rgb(0, 0, 0);
-    top: 0px;
-    left: 0px;
-    margin: 20px;
-    background-color: rgb(145, 240, 227);
-    border-style: none;
-    z-index: 110;
-    cursor: pointer;
-}
-
-#btn-open2 {
-    position: relative;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: rgb(0, 0, 0);
-    top: 0px;
-    left: 0px;
-    margin: 20px;
-    background-color: rgb(145, 240, 227);
-    border-style: none;
-    z-index: 110;
-    cursor: pointer;
-}
-
-#btn-open3 {
-    position: relative;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: rgb(0, 0, 0);
-    top: 0px;
-    left: 0px;
-    margin: 20px;
-    background-color: rgb(145, 240, 227);
-    border-style: none;
-    z-index: 110;
-    cursor: pointer;
-}
-
-#btn-open4 {
-    position: relative;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: rgb(0, 0, 0);
-    top: 0px;
-    left: 0px;
-    margin: 20px;
-    background-color: rgb(145, 240, 227);
-    border-style: none;
-    z-index: 110;
-    cursor: pointer;
-}
-
-#btn-open5 {
-    position: relative;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: rgb(0, 0, 0);
-    top: 0px;
-    left: 0px;
-    margin: 20px;
-    background-color: rgb(145, 240, 227);
-    border-style: none;
-    z-index: 110;
-    cursor: pointer;
-}
-
 #room-header {
     font-size: 4.5em;
     font-weight: bold;
@@ -527,6 +383,19 @@ a.hovertext:focus:after {
 .media-control-bar button:active {
     background-color: #888;
     color: #000;
+}
+
+.awesomeMuteIcon {
+    color: red;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 3em;
+    white-space: nowrap;
+    direction: ltr;
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    z-index: 99;
 }
 
 .material-icons {
